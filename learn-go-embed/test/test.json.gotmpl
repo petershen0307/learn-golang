@@ -1,0 +1,12 @@
+{
+    "scenario_name": "{{ .Name }}",
+    "platform": "win32",
+    "conditional_action": [
+        {
+            "action_name": "COLLECT_PII_INFO",
+            "entry_file": "${test_tool_cdi_entry_file}",
+            "entry_file_arguments": "${test_tool_cdi_entry_file_arguments}",
+            "download_link": "${test_tool_cdi_download_link}"
+        }
+    ]
+}
