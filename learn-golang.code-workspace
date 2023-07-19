@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "learn-go-embed"
+    },
+    {
+      "path": "learn-go-rod"
+    },
+    {
+      "path": "learn-reflect"
+    },
+    {
+      "path": "parse-fedramp-deploy-log"
+    }
+  ]
+}
