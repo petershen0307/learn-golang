@@ -14,6 +14,9 @@
     },
     {
       "path": "parse-fedramp-deploy-log"
+    },
+    {
+      "path": "learn-logrus"
     }
   ]
 }
