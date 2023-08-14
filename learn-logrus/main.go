@@ -13,8 +13,6 @@ func main() {
 			logrus.FieldKeyTime:  "timestamp",
 			logrus.FieldKeyLevel: "severity",
 			logrus.FieldKeyMsg:   "message",
-			"traceID":            "traceID",
-			"new":                "new",
 		},
 	})
 	ctx := logger.SetLogEntryToContext(context.Background(), logrus.WithFields(logrus.Fields{
