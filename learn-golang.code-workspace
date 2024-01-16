@@ -20,6 +20,9 @@
     },
     {
       "path": "learn-closure"
+    },
+    {
+      "path": "learn-context"
     }
   ]
 }
