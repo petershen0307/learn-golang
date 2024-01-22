@@ -84,6 +84,25 @@ func Test_spawn_context_one_layer_cancel_from_leaf(t *testing.T) {
 	}
 }
 
+func Test_spawn_context_one_layer_cancel_from_leaf_partial(t *testing.T) {
+	ctx1, _ := context.WithCancel(context.Background())
+	ctx11, cancelFunc11 := context.WithCancel(ctx1)
+	ctx12, _ := context.WithCancel(ctx1)
+	resultChan := make(chan string, 2)
+
+	go query(ctx11, 1, resultChan)
+	go query(ctx12, 2, resultChan)
+	cancelFunc11()
+
+	time.Sleep(1 * time.Second)
+	s := <-resultChan
+	assert.Contains(t, s, "query cancel!")
+	log.Println("result", s)
+	s = <-resultChan
+	assert.Contains(t, s, "query finish!")
+	log.Println("result", s)
+}
+
 func Test_spawn_context_one_layer_cancel_from_root(t *testing.T) {
 	ctx1, cancelFunc1 := context.WithCancel(context.Background())
 	ctx11, _ := context.WithCancel(ctx1)
@@ -158,23 +177,4 @@ func Test_spawn_context_multiple_layer_cancel_from_root(t *testing.T) {
 		assert.Contains(t, s, "query cancel!")
 		log.Println("result", s)
 	}
-}
-
-func Test_channel_always_allow(t *testing.T) {
-	ch := make(chan int)
-	close(ch)
-	<-ch
-	assert.True(t, true)
-}
-
-func Test_channel_always_block(t *testing.T) {
-	var ch chan int
-	select {
-	case ch <- 1:
-		assert.True(t, false)
-	case <-ch:
-		assert.True(t, false)
-	default:
-	}
-	assert.True(t, true)
 }
