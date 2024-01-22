@@ -159,3 +159,22 @@ func Test_spawn_context_multiple_layer_cancel_from_root(t *testing.T) {
 		log.Println("result", s)
 	}
 }
+
+func Test_channel_always_allow(t *testing.T) {
+	ch := make(chan int)
+	close(ch)
+	<-ch
+	assert.True(t, true)
+}
+
+func Test_channel_always_block(t *testing.T) {
+	var ch chan int
+	select {
+	case ch <- 1:
+		assert.True(t, false)
+	case <-ch:
+		assert.True(t, false)
+	default:
+	}
+	assert.True(t, true)
+}
