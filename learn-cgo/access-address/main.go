@@ -1,6 +1,7 @@
 package main
 
 /*
+#cgo CFLAGS: -Wpadded
 #include <stdlib.h>
 #include <stdio.h>
 typedef struct {
