@@ -7,6 +7,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	dto "github.com/prometheus/client_model/go"
 	"github.com/prometheus/common/expfmt"
 )
 
@@ -31,6 +32,7 @@ func main() {
 	// http.ListenAndServe(":2112", nil)
 	recordMetrics()
 	time.Sleep(5 * time.Second)
+	fmt.Println("value:", dump())
 	printMetrics()
 }
 
@@ -48,4 +50,13 @@ func printMetrics() {
 		}
 	}
 	fmt.Println(buffer.String())
+}
+
+func dump() float64 {
+	metric := &dto.Metric{}
+	err := opsProcessed.Write(metric)
+	if err != nil {
+		return 0
+	}
+	return metric.GetCounter().GetValue()
 }
