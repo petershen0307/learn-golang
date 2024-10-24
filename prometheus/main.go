@@ -30,10 +30,16 @@ var (
 func main() {
 	// http.Handle("/metrics", promhttp.Handler())
 	// http.ListenAndServe(":2112", nil)
-	recordMetrics()
-	time.Sleep(5 * time.Second)
-	fmt.Println("value:", dump())
-	printMetrics()
+	// recordMetrics()
+	// time.Sleep(5 * time.Second)
+	// fmt.Println("value:", dump())
+	// printMetrics()
+	runSample()
+	j, e := dumpToJson(myRegister)
+	if e != nil {
+		panic(e)
+	}
+	fmt.Println(j)
 }
 
 func printMetrics() {
