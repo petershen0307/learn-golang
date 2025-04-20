@@ -30,24 +30,30 @@ func main() {
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill)
 	i := 0
 	for {
-		message := root.Message{
-			Content:    fmt.Sprintf("Hello, Kafka! %d", i),
-			RetryCount: 0,
-			Timestamp:  time.Duration(time.Now().UTC().Unix()),
-		}
-		mdata, err := json.Marshal(message)
-		if err != nil {
-			log.Fatalf("Error marshalling message: %v", err)
-		}
+		select {
+		case <-ctx.Done():
+			fmt.Println("Context done, exiting...")
+			return
+		default:
+			message := root.Message{
+				Content:    fmt.Sprintf("Hello, Kafka! %d", i),
+				RetryCount: 0,
+				Timestamp:  time.Duration(time.Now().UTC().Unix()),
+			}
+			mdata, err := json.Marshal(message)
+			if err != nil {
+				log.Fatalf("Error marshalling message: %v", err)
+			}
 
-		if err := writer.WriteMessages(ctx,
-			kafka.Message{
-				Value: mdata,
-			}); err != nil {
-			log.Fatalf("Error writing message: %v", err)
+			if err := writer.WriteMessages(ctx,
+				kafka.Message{
+					Value: mdata,
+				}); err != nil {
+				log.Fatalf("Error writing message: %v", err)
+			}
+			fmt.Printf("Sent message: %#v\n", message)
+			i++
+			time.Sleep(time.Second)
 		}
-		fmt.Printf("Sent message: %#v\n", message)
-		i++
-		time.Sleep(time.Second)
 	}
 }
