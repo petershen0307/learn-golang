@@ -33,6 +33,7 @@ func main() {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		for e := range producer.Events() {
 			switch m := e.(type) {
 			case *kafka.Message:
@@ -43,7 +44,6 @@ func main() {
 				}
 			}
 		}
-		wg.Done()
 	}()
 	i := 0
 	for {
