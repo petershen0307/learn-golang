@@ -42,28 +42,25 @@ func main() {
 		for {
 			select {
 			case <-ctx.Done():
-				fmt.Println("Context done, exit reading...")
+				fmt.Println("Context done, exiting...")
+				consumer.Close()
 				return
 			default:
 				msg, err := consumer.ReadMessage(time.Second) // blocking until a message is received
-				if err == nil {
+				if err != nil {
 					switch e := err.(type) {
 					case kafka.Error:
-						if e.IsTimeout() {
-							continue
-						} else {
-							log.Printf("Error reading message: %v", e)
+						if !e.IsTimeout() {
+							log.Printf("Error reading message: %v", err)
 						}
+					default:
+						log.Printf("Error reading message: %v", err)
 					}
+					continue
 				}
-				if msg != nil {
-					fmt.Printf("Received message: %s\n", string(msg.Value))
-				}
+				fmt.Printf("Received message: %s\n", string(msg.Value))
 			}
 		}
 	}()
-	<-ctx.Done()
-	fmt.Println("Context done, exiting...")
-	consumer.Close()
 	wg.Wait()
 }
