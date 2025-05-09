@@ -22,3 +22,21 @@ func Test_main(t *testing.T) {
 		fmt.Println(v.Type(), ":", v.String())
 	}
 }
+
+func Test_map(t *testing.T) {
+	m := map[string]string{
+		"a": "1",
+		"b": "2",
+	}
+	iter := reflect.ValueOf(m).MapRange()
+	// panic if call Key() before Next()
+	// panic: MapIter.Key called before Next
+	// k := iter.Key()
+	// v := iter.Value()
+	// fmt.Println(k, ":", v)
+	for iter.Next() {
+		k := iter.Key()
+		v := iter.Value()
+		fmt.Println(k, ":", v)
+	}
+}
