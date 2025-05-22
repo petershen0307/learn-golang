@@ -32,6 +32,9 @@
     },
     {
       "path": "prometheus"
+    },
+    {
+      "path": "learn-kafka"
     }
   ]
 }
